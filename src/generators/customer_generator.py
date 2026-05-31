@@ -15,16 +15,39 @@ customers = []
 
 # Ciclo que genera la información falsa
 for customer_id in range(1, NUM_CUSTOMERS + 1):
-    full_name = fake.name()
+    first_name = fake.first_name()
+    last_name = fake.last_name()
+    full_name = f"{first_name} {last_name}"
     age = random.randint(21, 70)
-    monthly_income = np.random.lognormal(mean=10, sigma=0.45)  # Genera salarios mensuales en una distribución log-normal
-    monthly_income = round(monthly_income / 100, 2)  # Redondeamos los resultados
     #employment_years = random.randint(0, 35)
+    
+    # Generar y modelar segmento de cliente
+    customer_segment = random.choices(
+        ["Economic", "Standard", "Premium"],
+        weights=[45, 40, 15],
+        k=1
+    )[0]
+    
+    if customer_segment == "Economic":
+        monthly_income = random.randint(15000, 45000)
+    elif customer_segment == "Standard":
+        monthly_income = random.randint(45000, 120000)
+    else:
+        monthly_income = random.randint(120000, 350000)
+
     
     # Simular una generación de años de experiencia más realista
     career_start_age = random.randint(18, 25) # Calculamos la edad máxima de experiencia, asumiendo que cada cliente pudo haber entrado a trabajar desde los 18 a 25 años
     max_employment_years = max(age - career_start_age, 0) # Generamos el tope máximo de experiencia restando el inicio laboral menos la edad
-    employment_years = random.randint(0, max_employment_years) # Generamos un número de experiencia
+    # Generar experiencia "coherente" dependiendo el segmento
+    if customer_segment == "Premium":
+        min_experience = max(int(max_employment_years * 0.5), 5)
+        employment_years = random.randint(min(min_experience, max_employment_years), max_employment_years)
+    elif customer_segment == "Standard":
+        min_experience = max( int(max_employment_years * 0.3), 2)
+        employment_years = random.randint(min(min_experience, max_employment_years), max_employment_years)
+    else:
+        employment_years = random.randint(0, max_employment_years)
     
     # Condicion que genera score crediticio relacionado con el ingreso
     if monthly_income >= 120000:
@@ -42,16 +65,6 @@ for customer_id in range(1, NUM_CUSTOMERS + 1):
     
     # Simulamos porcentaje de ingreso comprometido
     debt_to_income = round(monthly_debt / monthly_income, 2)
-    
-    ## MODELAR CLIENTES ##
-    
-    # Crear segmentos de cliente
-    if monthly_income >= 120000:
-        customer_segment = "Premium"
-    elif monthly_income >= 50000:
-        customer_segment = "Standard"
-    else:
-        customer_segment = "Economic"
         
         
     # Modelar riesgo
@@ -65,7 +78,7 @@ for customer_id in range(1, NUM_CUSTOMERS + 1):
     
     # Simular errores en datos / inconsistencias
     if random.random() < DATA_INCONSISTENCY:
-        monthly_income = None
+        monthly_income = -9999  # Valor erróneo para ingresos
         ## Agregar más inconsistencias a demás celdas ##
         
         
