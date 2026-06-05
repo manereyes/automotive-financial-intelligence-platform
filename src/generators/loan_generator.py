@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import random
 from datetime import timedelta
+from pandas.tseries.offsets import BusinessDay
+
 
 # Cargar Datasets
 
@@ -23,11 +25,15 @@ for loan_id in range(1, NUM_LOANS + 1):
     customer = customers_df.sample(1).iloc[0]
     # Elegir el vehiculo que quiere obtener (simulación realista por segmento del cliente y precio del vehiculo)
     if customer["customer_segment"] == "Premium":
-        eligible_vehicles = vehicles_df[vehicles_df["current_value"] >= 1200000]
+        eligible_vehicles = vehicles_df[vehicles_df["current_value"] >= 1000000]
     elif customer["customer_segment"] == "Standard":
-        eligible_vehicles = vehicles_df[(vehicles_df["current_value"] >= 500000) & (vehicles_df["current_value"] < 1200000)]
+        eligible_vehicles = vehicles_df[(vehicles_df["current_value"] >= 500000) & (vehicles_df["current_value"] < 1000000)]
     else:
         eligible_vehicles = vehicles_df[vehicles_df["current_value"] < 500000]
+
+    # Fallback de seguridad
+    if eligible_vehicles.empty:
+        eligible_vehicles = vehicles_df
         
     # Elegir un auto a financiar
     vehicle = eligible_vehicles.sample(1).iloc[0]
@@ -82,6 +88,12 @@ for loan_id in range(1, NUM_LOANS + 1):
     loan_start_date = (START_DATE + timedelta(days=random_days)).date()
     
     
+    # Simular fechas de aprobación/rechazo de préstamo
+    random_loan_waiting = random.randint(1, 5)
+    approved_or_rejected_on = loan_start_date + BusinessDay(random_loan_waiting)  # Usamos BusinessDay para sumar días, sin contar fines de semanas
+    
+    
+    
     # Resultado final - Diccionario
     loan = {
         "loan_id": loan_id,
@@ -94,7 +106,8 @@ for loan_id in range(1, NUM_LOANS + 1):
         "monthly_payment": round(monthly_payment, 2),
         "approval_status": approval_status,
         "default_probability": round(default_probability, 2),
-        "loan_start_date": loan_start_date
+        "loan_start_date": loan_start_date,
+        "approved_or_rejected_on": approved_or_rejected_on
     }   
     
     # Meter a la lista de préstamos
