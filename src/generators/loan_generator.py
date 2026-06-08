@@ -16,8 +16,8 @@ loans = []
 # Número de préstamos máximos a realizar
 NUM_LOANS = 7000
 # Fechas minimas y máximas para la generación de fechas de préstamos para análisis temporal y tendencias
-START_DATE = pd.Timestamp("2021-01-01")
-END_DATE = pd.Timestamp("2025-12-31")
+START_DATE = pd.Timestamp("2020-01-01")
+END_DATE = pd.Timestamp("2026-03-24")
 
 # Ciclo que itera los préstamos
 for loan_id in range(1, NUM_LOANS + 1):
