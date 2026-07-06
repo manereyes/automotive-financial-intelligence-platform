@@ -34,10 +34,6 @@ for loan_id in range(1, NUM_LOANS + 1):
     # Fallback de seguridad
     if eligible_vehicles.empty:
         eligible_vehicles = vehicles_df
-<<<<<<< HEAD
-=======
-        
->>>>>>> e5d4729 (New Commit - Portfolio Overwiew Notebook created, EDA made)
         
     # Elegir un auto a financiar
     vehicle = eligible_vehicles.sample(1).iloc[0]
