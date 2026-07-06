@@ -3,7 +3,7 @@
 import pandas as pd
 import numpy as np
 
-from src.config.database import supabase
+from platform.config.database import supabase
 
 loans_df = pd.read_csv("data/loans.csv")
 

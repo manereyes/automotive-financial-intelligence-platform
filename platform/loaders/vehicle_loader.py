@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from src.config.database import supabase
+from platform.config.database import supabase
 
 vehicles_df = pd.read_csv("data/vehicles.csv")
 

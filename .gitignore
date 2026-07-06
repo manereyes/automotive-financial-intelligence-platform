@@ -5,7 +5,3 @@ __pycache__/
 data/customers.csv
 data/vehicles.csv
 data/loans.csv
-<<<<<<< HEAD
-=======
-docs/Portfolio Overview Analysis.docx
->>>>>>> e5d4729 (New Commit - Portfolio Overwiew Notebook created, EDA made)

@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from src.config.database import supabase
+from platform.config.database import supabase
 
 customers_df = pd.read_csv("data/customers.csv")
 
